@@ -7,7 +7,7 @@ players = ['Marko', 'Ana', 'Maritza', 'Lily', 'Natalia', 'Ruby', 'Ruben']
 def setup_round(players, new_picker=None):
     
     picker = ""
-    if new_picker: # <-- CHANGED
+    if new_picker:
         picker = new_picker
     else:
         picker = random.choice(players) # This only runs on the first game
@@ -20,7 +20,7 @@ def setup_round(players, new_picker=None):
 
     print("\n" + "="*30)
     print(f"NEW ROUND: The picker is: {picker}")
-    # print(f"The sitters are: {sitters}") # Optional: can be noisy
+    
     return picker, sitters 
     
 
@@ -34,52 +34,50 @@ def simulate_chase(picker, goose):
 
 def play_game():
 
-    next_picker = None # <-- NEW: No picker has been chosen yet
+    next_picker = None 
     
-    while True: # <-- NEW: The main game loop
+    while True: 
     
-        # --- Step 1: Setup the round ---
-        # Pass in 'next_picker' so setup_round knows who is 'it'
-        picker, sitters = setup_round(players, next_picker) # <-- CHANGED
+        # --- Setup the round ---
+        picker, sitters = setup_round(players, next_picker) 
         
-        # --- Step 2: Assign Duck/Goose ---
-        # These are *inside* the loop to reset every round
+        # --- Assign Duck/Goose ---
         assignments = {} 
         random_index = random.randrange(len(sitters)) 
         
-        goose_name = "" # <-- Moved this up
+        goose_name = "" 
         
         for p in range(len(sitters)):
             name = sitters[p]
             
             if p == random_index:
                 assignments[name] = 'goose!'
-                goose_name = name # <-- We can find the goose right here!
+                goose_name = name 
             else:
                 assignments[name] = 'duck'
                 
-        # --- Step 3: Simulate the Taps (Optional idea from before) ---
+        
         print("The picker starts tapping...")
         for sitter_name in sitters:
-            time.sleep(0.5) # Pause for drama
+            time.sleep(0.5) 
             status = assignments[sitter_name]
             print(f"{picker} taps {sitter_name}... {status.upper()}")
             if status == 'goose!':
-                break # Stop tapping once the goose is found
+                break 
         
-        # --- Step 4: Start the Chase! ---
+       
         print(f"\nThe chase is on between {picker} (picker) and {goose_name} (goose)!")
         
-        # We call simulate_chase and *save* the result
+        
         # This name will be fed back into setup_round at the
         # top of the loop on the next iteration.
         next_picker = simulate_chase(picker, goose_name) # <-- CHANGED
         
-        # --- Step 5: Ask to play again ---
+        
         choice = input("Play another round? (y/n): ").lower()
         if choice != 'y':
             print("Thanks for playing!")
-            break # <-- NEW: Exits the 'while True' loop
+            break
 
 
 if __name__ == '__main__':      
